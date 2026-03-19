@@ -3,7 +3,7 @@ import { Badge, Grid, Icon } from "@tremor/react";
 import { Tooltip, Checkbox } from "antd";
 import { UserInfo } from "./types";
 import { PencilAltIcon, TrashIcon, InformationCircleIcon, RefreshIcon } from "@heroicons/react/outline";
-import { formatNumberWithCommas } from "@/utils/dataUtils";
+import { formatNumberWithCommas, copyToClipboard } from "@/utils/dataUtils";
 
 interface SelectionOptions {
   selectedUsers: UserInfo[];
@@ -29,8 +29,16 @@ export const columns = (
       accessorKey: "user_id",
       enableSorting: true,
       cell: ({ row }) => (
-        <Tooltip title={row.original.user_id}>
-          <span className="text-xs">{row.original.user_id ? `${row.original.user_id.slice(0, 7)}...` : "-"}</span>
+        <Tooltip title="Click to copy">
+          <span
+            className="text-xs cursor-pointer hover:text-blue-500"
+            onClick={(e) => {
+              e.stopPropagation();
+              copyToClipboard(row.original.user_id, "User ID copied to clipboard");
+            }}
+          >
+            {row.original.user_id ? `${row.original.user_id.slice(0, 7)}...` : "-"}
+          </span>
         </Tooltip>
       ),
     },
